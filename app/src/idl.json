@@ -6,43 +6,96 @@
       "name": "initialize",
       "accounts": [
         {
-          "name": "baseAccount",
+          "name": "initializer",
           "isMut": true,
           "isSigner": true
         },
         {
-          "name": "user",
+          "name": "mint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "vaultAccount",
           "isMut": true,
-          "isSigner": true
+          "isSigner": false
+        },
+        {
+          "name": "initializerDepositTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "initializerReceiveTokenAccount",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "escrowAccount",
+          "isMut": true,
+          "isSigner": false
         },
         {
           "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
           "isMut": false,
           "isSigner": false
         }
       ],
       "args": [
         {
-          "name": "data",
-          "type": "string"
+          "name": "vaultAccountBump",
+          "type": "u8"
+        },
+        {
+          "name": "initializerAmount",
+          "type": "u64"
+        },
+        {
+          "name": "takerAmount",
+          "type": "u64"
         }
       ]
     },
     {
-      "name": "create",
+      "name": "cancel",
       "accounts": [
         {
-          "name": "baseAccount",
+          "name": "initializer",
           "isMut": true,
           "isSigner": true
         },
         {
-          "name": "user",
+          "name": "vaultAccount",
           "isMut": true,
-          "isSigner": true
+          "isSigner": false
         },
         {
-          "name": "systemProgram",
+          "name": "vaultAuthority",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "initializerDepositTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "escrowAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
           "isMut": false,
           "isSigner": false
         }
@@ -50,55 +103,97 @@
       "args": []
     },
     {
-      "name": "increment",
+      "name": "exchange",
       "accounts": [
         {
-          "name": "baseAccount",
+          "name": "taker",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "takerDepositTokenAccount",
           "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "takerReceiveTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "initializerDepositTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "initializerReceiveTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "initializer",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "escrowAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "vaultAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "vaultAuthority",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
           "isSigner": false
         }
       ],
       "args": []
-    },
-    {
-      "name": "update",
-      "accounts": [
-        {
-          "name": "baseAccount",
-          "isMut": true,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "data",
-          "type": "string"
-        }
-      ]
     }
   ],
   "accounts": [
     {
-      "name": "BaseAccount",
+      "name": "EscrowAccount",
       "type": {
         "kind": "struct",
         "fields": [
           {
-            "name": "count",
+            "name": "initializerKey",
+            "type": "publicKey"
+          },
+          {
+            "name": "initializerDepositTokenAccount",
+            "type": "publicKey"
+          },
+          {
+            "name": "initializerReceiveTokenAccount",
+            "type": "publicKey"
+          },
+          {
+            "name": "initializerAmount",
             "type": "u64"
           },
           {
-            "name": "data",
-            "type": "string"
-          },
-          {
-            "name": "dataList",
-            "type": {
-              "vec": "string"
-            }
+            "name": "takerAmount",
+            "type": "u64"
           }
         ]
       }
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "ErrOne",
+      "msg": "Error 001 !"
     }
   ],
   "metadata": {

@@ -1,7 +1,7 @@
 [package]
 name = "SolaMe"
 version = "0.1.0"
-description = "Created with Anchor"
+description = "A Solana App"
 edition = "2018"
 
 [lib]
@@ -17,3 +17,8 @@ default = []
 
 [dependencies]
 anchor-lang = "0.19.0"
+solana-program="1.6.9"
+thiserror="1.0.24"
+spl-token = {version = "3.1.1", features = ["no-entrypoint"]}
+arrayref = "0.3.6"
+anchor-spl = {version = "0.19.0"}

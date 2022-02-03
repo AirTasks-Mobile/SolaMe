@@ -18,16 +18,16 @@ const wallets = [
   getPhantomWallet()
 ]
 
-// const arr = Object.values(kp._keypair.secretKey)
-// const secret = new Uint8Array(arr)
-// const pair = web3.Keypair.fromSecretKey(secret)
+const arr = Object.values(kp._keypair.secretKey)
+const secret = new Uint8Array(arr)
+const pair = web3.Keypair.fromSecretKey(secret)
 
-const network = clusterApiUrl('devnet');
-//const network = 'http://127.0.0.1:8899';
+//const network = clusterApiUrl('devnet');
+const network = 'http://127.0.0.1:8899';
 
 const { SystemProgram, Keypair } = web3;
 /* create an account  */
-const pair = Keypair.generate();
+//const pair = Keypair.generate();
 
 const opts = {
   preflightCommitment: "processed"
@@ -53,19 +53,6 @@ function App() {
 
   const wallet = useWallet();
 
-  console.log('Start');
-
-  // async function getProvider() {
-  //   const wallet = window.solana
-  //   const network = "http://127.0.0.1:8899"
-  //   const connection = new Connection(network, opts.preflightCommitment);
-  //
-  //   const provider = new Provider(
-  //     connection, wallet, opts.preflightCommitment,
-  //   )
-  //   return provider
-  // }
-
   async function getProvider() {
     /* create the provider and return it to the caller */
     /* network set to local network for now */
@@ -84,7 +71,8 @@ function App() {
       await program.rpc.initialize('Start !', {
         accounts:{
           baseAccount: pair.publicKey,
-          user: provider.wallet.publicKey,
+          authority: provider.wallet.publicKey,
+          rent: web3.SYSVAR_RENT_PUBKEY,
           systemProgram: SystemProgram.programId,
         },
         signers:[pair],
@@ -112,7 +100,9 @@ function App() {
     await program.rpc.update(input, {
       accounts: {
         baseAccount: pair.publicKey,
+        authority: provider.wallet.publicKey,
       },
+      signers:[provider.wallet.payer],
     });
 
     const account = await program.account.baseAccount.fetch(pair.publicKey);
@@ -121,37 +111,12 @@ function App() {
     setInput('');
   }
 
-  async function createCounter() {
-    const provider = await getProvider()
-    console.log('Create !!!!!');
-    /* create the program interface combining the idl, program ID, and provider */
-    const program = new Program(idl, programID, provider);
-    try {
-      /* interact with the program via rpc */
-
-      await program.rpc.create({
-        accounts: {
-          baseAccount: pair.publicKey,
-          user: provider.wallet.publicKey,
-          systemProgram: SystemProgram.programId,
-        },
-        signers: [pair]
-      });
-
-      const account = await program.account.baseAccount.fetch(pair.publicKey);
-      console.log('account: ', account);
-      setValue(account.count.toString());
-    } catch (err) {
-      console.log("Transaction error: ", err);
-    }
-  }
-
   async function increment() {
     const provider = await getProvider();
     const program = new Program(idl, programID, provider);
     await program.rpc.increment({
       accounts: {
-        baseAccount: pair.publicKey
+        baseAccount: pair.publicKey,
       }
     });
 
